@@ -41,17 +41,19 @@ module.exports = stylelint.createPlugin(ruleName, (actual, options = {}, context
           if (isFixEnabled) {
             // Don't report, fix will be applied
             comment.remove()
-          } else {
-            stylelint.utils.report({
-              message: messages.rejected,
-              node: comment,
-              result,
-              ruleName,
-            })
           }
         }
       }
     })
+
+    if (!isLicenseHeaderPresent) {
+      stylelint.utils.report({
+        message: messages.rejected,
+        node: root,
+        result,
+        ruleName,
+      })
+    }
 
     if (!isLicenseHeaderPresent && isFixEnabled) {
       const newline = context.newline
